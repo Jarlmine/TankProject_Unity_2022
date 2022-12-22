@@ -6,9 +6,18 @@ using UnityEngine.UI;
 public class TurretController : BaseController
 {
 
+    public Transform Head;
+    public float seekSpeed = 50f;
+    public float rotateAngle = 70f;
+
+    Vector3 originalRotation;
 
 
+    protected void Start()
+    {
+        originalRotation = Head.localRotation.eulerAngles;
 
+    }
     protected void Fire()
     {
         Instantiate<GameObject>(BulletPrefab, BulletSpawnPosition.transform.position, BulletSpawnPosition.transform.rotation);
@@ -17,6 +26,7 @@ public class TurretController : BaseController
 
     void Update()
     {
+        Head.localRotation = Quaternion.Euler(originalRotation.x, Mathf.PingPong(Time.time * seekSpeed, rotateAngle * 2) - rotateAngle, 1f);
 
         //Layer enculé 
         RaycastHit hit;
@@ -26,4 +36,5 @@ public class TurretController : BaseController
             Fire();
         }
     }
+    
 }
